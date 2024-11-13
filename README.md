@@ -1,4 +1,4 @@
-## Materials for course 'The Demography of Kinship'
+## Materials for course 'Kinship Structures'
 
 European Doctoral School of Demography (EDSD)
 
