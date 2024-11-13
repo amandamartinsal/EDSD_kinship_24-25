@@ -38,7 +38,7 @@ Some useful things to know:
 
 - Download the syllabus: https://github.com/amandamartinsal/EDSD_kinship/blob/master/EDSD_2024_syllabus.pdf [UPDATE]
 - The course's slides are available here: https://github.com/amandamartinsal/EDSD_kinship/tree/master/slides [UPDATE]
-- Find this website's source code on GitHub: https://github.com/amandamartinsal/EDSD_kinship [UPDATE]
+- Find this website's source code on GitHub: https://github.com/amandamartinsal/EDSD_kinship_24-25
 
 ![](Picture4.png)
 
