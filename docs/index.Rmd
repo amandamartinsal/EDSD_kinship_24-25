@@ -1,5 +1,5 @@
 ---
-title: "The Demography of Kinship"
+title: "Kinship Structures"
 subtitle: "European Doctoral School of Demography, Paris, November 18-21, 2024"
 author: "Instructors: Diego Alburez-Gutierrez & Amanda Martins de Almeida"
 date: "Updated: `r Sys.Date()`"
