@@ -375,7 +375,7 @@ br_2015$kin_summary %>%
   geom_line(aes(age_focal, count_living))  +
   geom_vline(xintercept = 35, color=2)+
   theme_bw() +
-  labs(x = "Focal's age", y= "Number of living female relatives") +
+  labs(x = "Age of focal", y= "Number of living female relatives") +
   facet_wrap(~kin_label)
 ```
 
@@ -396,7 +396,7 @@ br_2015$kin_summary %>%
   ggplot(aes(x = age_focal, y = count_living)) +
   geom_area(aes(fill = kin_label), colour = "black") +
   geom_line(data = counts, size = 2) +
-  labs(x = "Focal's age",
+  labs(x = "Age of focal",
        y = "Number of living female relatives",
        fill = "Kin") +
   coord_cartesian(ylim = c(0, 6)) +
@@ -445,7 +445,7 @@ br_2015$kin_summary %>%
   ggplot(aes(x = age_focal, y = count_dead)) +
     geom_area(aes(fill = kin_label), colour = "black") +
     geom_line(data = loss1, size = 2) +
-    labs(x = "Focal's age",
+    labs(x = "Age of focal",
          y = "Number of kin deaths experienced at each age",
          fill = "Kin") +
     coord_cartesian(ylim = c(0, 0.086)) +
@@ -471,7 +471,7 @@ br_2015$kin_summary %>%
  ggplot(aes(x = age_focal, y = count_cum_dead)) +
   geom_area(aes(fill = kin_label), colour = "black") +
   geom_line(data = loss2, aes(y = count_cum_dead), size = 2) +
-  labs(x = "Focal's age",
+  labs(x = "Age of focal",
        y = "Number of kin deaths experienced (cumulative)",
        fill = "Kin") +
   theme_bw() +
@@ -865,14 +865,19 @@ Let's group aunts and siblings and visualize the number of living kin by sex and
 
 ```{r 53, message=FALSE, warning=FALSE}
 kin_out <- fra_kin_2sex$kin_summary %>%
-  mutate(kin = case_when(kin %in% c("os", "ys") ~ "s",
-                         kin %in% c("ya", "oa") ~ "a",
-                         T ~ kin)) %>%
-  filter(kin %in% c("d", "m", "gm", "ggm", "s", "a"))
+  mutate(kin_label = case_when(kin == "d" ~ "Children",
+                         kin == "m" ~ "Parents",
+                         kin == "gm" ~ "Grandparents",
+                         kin == "ggm" ~ "Great-grandparents",
+                         kin == "os" ~ "Siblings",
+                         kin == "ys" ~ "Siblings",
+                         kin == "oa" ~ "Aunts/Uncles",
+                         kin == "ya" ~ "Aunts/Uncles",
+                         T ~ "error?")) %>% 
+    filter(kin_label %in% c("Children", "Parents", "Grandparents", "Great-grandparents", "Siblings", "Aunts/Uncles"))
 
 kin_out %>%
-  summarise(count=sum(count_living), .by = c(kin, age_focal, sex_kin)) %>%
-  rename_kin(sex = "2sex") %>% 
+  summarise(count=sum(count_living), .by = c(kin_label, age_focal, sex_kin)) %>%
   ggplot(aes(age_focal, count, fill=sex_kin))+
   geom_area()+
   theme_bw() +
@@ -888,9 +893,8 @@ Information on kin availability by sex allows us to consider sex ratios, a tradi
 
 ```{r 54, message=FALSE, warning=FALSE}
 kin_out %>%
-  group_by(kin, age_focal) %>%
+  group_by(kin_label, age_focal) %>%
   summarise(sex_ratio = sum(count_living[sex_kin=="m"], na.rm=T)/sum(count_living[sex_kin=="f"], na.rm=T)) %>%
-  rename_kin(sex = "2sex")  %>% 
   ggplot(aes(age_focal, sex_ratio))+
   geom_line()+
   theme_bw() +
@@ -907,8 +911,7 @@ We see a slightly different pattern for grandparents since Focal's experience of
 
 ```{r 55, message=FALSE, warning=FALSE}
 kin_out %>%
-  summarise(count=sum(count_dead), .by = c(kin, sex_kin, age_focal)) %>%
-  rename_kin(sex = "2sex") %>% 
+  summarise(count=sum(count_dead), .by = c(kin_label, sex_kin, age_focal)) %>%
   ggplot(aes(age_focal, count, col=sex_kin))+
   geom_line()+
   theme_bw() +
@@ -975,13 +978,18 @@ kin_out_time_invariant <- kin2sex(
 kin_out_time_variant$kin_summary %>%
   filter(cohort == 1950) %>% mutate(type = "Variant") %>%
   bind_rows(kin_out_time_invariant$kin_summary %>% mutate(type = "Invariant")) %>%
-  mutate(kin = case_when(kin %in% c("ys", "os") ~ "s",
-                         kin %in% c("ya", "oa") ~ "a",
-                         T ~ kin)) %>%
-  filter(kin %in% c("d", "m", "gm", "ggm", "s", "a")) %>%
-  group_by(type, kin, age_focal, sex_kin) %>%
+  mutate(kin_label = case_when(kin == "d" ~ "Children",
+                         kin == "m" ~ "Parents",
+                         kin == "gm" ~ "Grandparents",
+                         kin == "ggm" ~ "Great-grandparents",
+                         kin == "os" ~ "Siblings",
+                         kin == "ys" ~ "Siblings",
+                         kin == "oa" ~ "Aunts/Uncles",
+                         kin == "ya" ~ "Aunts/Uncles",
+                         T ~ "error?")) %>% 
+    filter(kin_label %in% c("Children", "Parents", "Grandparents", "Great-grandparents", "Siblings", "Aunts/Uncles")) %>% 
+  group_by(type, kin_label, age_focal, sex_kin) %>%
   summarise(count=sum(count_living)) %>%
-  rename_kin (sex = "2sex") %>% 
   ggplot(aes(age_focal, count, linetype=type))+
   geom_line()+ theme_bw() +
   labs(y = "Expected number of living kin by sex and Focal's age",
