@@ -36,8 +36,10 @@ This has led to the development of sophisticated methodological and conceptual a
 
 Some useful things to know:
 
-- Download the syllabus: https://github.com/amandamartinsal/EDSD_kinship_24-25/blob/master/EDSD_24-25_syllabus.pdf 
-- The course's slides are available here: https://github.com/amandamartinsal/EDSD_kinship_24-25/tree/master/slides 
+- Download the syllabus: https://github.com/amandamartinsal/EDSD_kinship_24-25/blob/master/EDSD_2024_25_kinship_syllabus.pdf 
+
+- The course's slides are available here: https://github.com/amandamartinsal/EDSD_kinship_24-25/tree/master/slides
+
 - Find this website's source code on GitHub: https://github.com/amandamartinsal/EDSD_kinship_24-25
 
 ![](Picture4.png)
